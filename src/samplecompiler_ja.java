@@ -1,4 +1,4 @@
-package info.haxahaxa.compiler;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.util.Enumeration;
 import java.util.ListResourceBundle;
 import java.util.Properties;
 
-public final class wcompiler_ja extends ListResourceBundle {
+public final class samplecompiler_ja extends ListResourceBundle {
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
@@ -16,7 +16,7 @@ public final class wcompiler_ja extends ListResourceBundle {
 	}
 
 	public static void printObj() {
-		wcompiler_ja c = new wcompiler_ja();
+		samplecompiler_ja c = new samplecompiler_ja();
 		Object[][] obj = c.getContents();
 		for (Object[] o : obj) {
 			String ky = o[0].toString();

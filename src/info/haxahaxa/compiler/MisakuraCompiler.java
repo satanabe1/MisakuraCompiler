@@ -9,6 +9,13 @@ import javax.tools.JavaFileObject;
 
 public class MisakuraCompiler {
 
+	/**
+	 * EntryPoint<br>
+	 * 開発用．しばらくデバッグモード．
+	 * 
+	 * @param args
+	 * 
+	 */
 	public static void main(String[] args) {
 		String srcFilePath = "hoge" + File.separator + "Hoge.java";
 		args = new String[] {
@@ -39,9 +46,7 @@ public class MisakuraCompiler {
 				// "-Akey[=value]",//
 				// "-X",//
 				// "-JD",//
-				srcFilePath
-
-		};
+				srcFilePath };
 
 		try {
 			Argument argument = new Argument(args);

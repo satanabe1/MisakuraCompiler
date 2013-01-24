@@ -86,19 +86,24 @@ public class Compiler implements ICompiler {
 		{
 			List<File> directories = strlist2filelist(argument
 					.getCLASS_OUTPUT());
-			if (directories.size() != 0) {
-				fileManager.setLocation(StandardLocation.CLASS_OUTPUT,
-						directories);
+			if (directories.size() == 0) {
+				// 指定がない場合はcurrent directoryに
+				directories.add(new File("."));
 			}
+			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, directories);
 		}
 
 		// クラスパスの追加
 		{
 			List<File> directories = strlist2filelist(argument.getCLASS_PATH());
-			if (directories.size() != 0) {
-				fileManager.setLocation(StandardLocation.CLASS_PATH,
-						directories);
+			if (directories.size() == 0) {
+				// 指定がない場合はuser class pathに
+				String classpath = System.getProperty("java.class.path", ".");
+				for (String path : classpath.split(File.pathSeparator)) {
+					directories.add(new File(path));
+				}
 			}
+			fileManager.setLocation(StandardLocation.CLASS_PATH, directories);
 		}
 
 		// プラットフォームクラスの検索場所
@@ -115,19 +120,25 @@ public class Compiler implements ICompiler {
 		{
 			List<File> directories = strlist2filelist(argument
 					.getSOURCE_OUTPUT());
-			if (directories.size() != 0) {
-				fileManager.setLocation(StandardLocation.SOURCE_OUTPUT,
-						directories);
+			if (directories.size() == 0) {
+				// 指定がない場合はcurrent directoryに
+				directories.add(new File("."));
 			}
+			fileManager
+					.setLocation(StandardLocation.SOURCE_OUTPUT, directories);
 		}
 
 		// ソースパスの追加
 		{
 			List<File> directories = strlist2filelist(argument.getSOURCE_PATH());
-			if (directories.size() != 0) {
-				fileManager.setLocation(StandardLocation.SOURCE_PATH,
-						directories);
+			if (directories.size() == 0) {
+				// 指定がない場合はuser class pathに
+				String classpath = System.getProperty("java.class.path", ".");
+				for (String path : classpath.split(File.pathSeparator)) {
+					directories.add(new File(path));
+				}
 			}
+			fileManager.setLocation(StandardLocation.SOURCE_PATH, directories);
 		}
 
 		return fileManager;

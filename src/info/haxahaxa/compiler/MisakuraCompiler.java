@@ -24,7 +24,7 @@ public class MisakuraCompiler {
 	 * 
 	 */
 	public static void main(String[] args) {
-//		args = getTestargs();
+		// args = getTestargs();
 		try {
 			Argument argument = new Argument(args);
 			ICompiler compiler = new Compiler(argument);
@@ -51,11 +51,11 @@ public class MisakuraCompiler {
 				"-nowarn",//
 				// "-verbose",//
 				"-deprecation",//
-				// "-cp","bin",
-				// "-classpath",
+				// "-cp", "bin",
+				// "-classpath"
 				// "classes" + File.pathSeparator + "hoge",//
-				"-sourcepath",
-				".",//
+				// "-sourcepath",
+				// ".",//
 				"-bootclasspath",
 				"/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar",//
 				"-extdirs", "ext",//

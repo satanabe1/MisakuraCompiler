@@ -159,6 +159,9 @@ public class Argument implements IArgument {
 	}
 
 	public List<String> getCLASS_OUTPUT() {
+		if (CLASS_OUTPUT.size() == 0) {
+			CLASS_OUTPUT.add(".");
+		}
 		return CLASS_OUTPUT;
 	}
 

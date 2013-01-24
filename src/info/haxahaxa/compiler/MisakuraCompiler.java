@@ -7,6 +7,13 @@ import java.io.InputStreamReader;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+/**
+ * 　メモ． まだ，デフォルトのsourcepathとclasspathの読み込みがうまくいかない
+ * 
+ * @author satanabe1
+ * 
+ */
+
 public class MisakuraCompiler {
 
 	/**
@@ -17,15 +24,36 @@ public class MisakuraCompiler {
 	 * 
 	 */
 	public static void main(String[] args) {
-		String srcFilePath = "hoge" + File.separator + "Hoge.java";
-		args = new String[] {
+//		args = getTestargs();
+		try {
+			Argument argument = new Argument(args);
+			ICompiler compiler = new Compiler(argument);
+			for (String sourceFilePath : argument.getSources()) {
+				ICompileResult result = compiler.compile(new File(
+						sourceFilePath));
+				if (result.isSuccess()) {
+					printSuccess(result);
+				} else {
+					printCompileError(result);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("---------------------------------");
+			help();
+		}
+	}
+
+	public static String[] getTestargs() {
+		String srcFilePath = "hoge" + File.separator + "HogeF.java";
+		String[] testargs = new String[] {
 				"-g:{lines,vars,source}",//
 				"-nowarn",//
 				// "-verbose",//
 				"-deprecation",//
 				// "-cp","bin",
-				"-classpath",
-				"classes" + File.pathSeparator + "hoge",//
+				// "-classpath",
+				// "classes" + File.pathSeparator + "hoge",//
 				"-sourcepath",
 				".",//
 				"-bootclasspath",
@@ -33,7 +61,7 @@ public class MisakuraCompiler {
 				"-extdirs", "ext",//
 				"-endorseddirs", "endor",//
 				// "-proc:{none,only}",//
-				// "-processor", "<class2>,<class3>",//
+				// "-processor", "class2",//
 				"-processorpath", "procpath",//
 				"-d", "tmp",//
 				"-s", "src",//
@@ -47,38 +75,29 @@ public class MisakuraCompiler {
 				// "-X",//
 				// "-JD",//
 				srcFilePath };
+		return testargs;
+	}
 
-		try {
-			Argument argument = new Argument(args);
-			ICompiler compiler = new Compiler(argument);
-			for (String sourceFilePath : argument.getSources()) {
-				ICompileResult result = compiler.compile(new File(
-						sourceFilePath));
-				if (!result.isSuccess()) {
-					printCompileError(result);
-				}
-				// result.dump(System.out);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println("---------------------------------");
-			help();
-		}
+	private static void printSuccess(ICompileResult result) {
+		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
+		System.out.println(misakura.getCompleteMessage(result));
 	}
 
 	private static void printCompileError(ICompileResult result) {
-		IErrorMessage misakura = MisakuraMessage.getInstance();
-		for (Diagnostic<? extends JavaFileObject> report : result
+		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
+		int errorcount = 0;
+		for (Diagnostic<? extends JavaFileObject> diagnostic : result
 				.getDiagnostics()) {
+			errorcount++;
 			try {
-				String mword = misakura.getMessage(report);
+				String mword = misakura.getErrorMessage(diagnostic);
 				System.err.println(mword);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		System.out.println("えらぁあああ あぉは " + errorcount + " これしゅぅぅぅ");
 	}
 
 	private static void help() {

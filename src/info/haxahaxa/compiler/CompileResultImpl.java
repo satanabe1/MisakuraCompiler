@@ -50,6 +50,11 @@ public class CompileResultImpl implements ICompileResult {
 	}
 
 	@Override
+	public StandardJavaFileManager getFileManager() {
+		return fileManager;
+	}
+
+	@Override
 	public void dump(OutputStream out) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("vvvvvvvvvvvvvvvvvvvv");

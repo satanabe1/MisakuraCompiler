@@ -1,5 +1,3 @@
-
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,8 +9,8 @@ public final class samplecompiler_ja extends ListResourceBundle {
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		printProp("props/MisakuraMessage.properties");
-		// printObj();
+		// printProp("props/MisakuraMessage.properties");
+		printObj();
 	}
 
 	public static void printObj() {
@@ -20,8 +18,12 @@ public final class samplecompiler_ja extends ListResourceBundle {
 		Object[][] obj = c.getContents();
 		for (Object[] o : obj) {
 			String ky = o[0].toString();
-			String val = o[1].toString().replaceAll("\n", "<br>");
-			System.out.println(ky + "=\"" + val + "\"");
+			String val = o[1].toString();
+			val = "\t" + val.replaceAll("\n", "\n\t\t");
+			System.out.println(ky);
+			System.out.println(val);
+			// val = val.replaceAll("\n", "<br>");
+			// System.out.println(ky + "=\"" + val + "\"");
 		}
 	}
 

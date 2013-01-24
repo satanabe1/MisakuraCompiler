@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~/.vim/skels/skel.build.xml -->
+<project name="master" default="main" basedir=".">
+
+	<property name="src.dir" location="src" /><!-- java source -->
+	<property name="class.dir" location="classes" /><!-- class output -->
+	<property name="jar.dir" location="jar" />
+	<property name="jar.name" value="misakura.jar" />
+
+	<property name="project.title" value="MisakuraCompiler" />
+	<property name="project.vendor" value="haxahaxa.info" />
+	<property name="project.author" value="satanabe1" />
+	<property name="project.mainclass" value="info.haxahaxa.compiler.MisakuraCompiler" />
+	<property name="project.runtimeclasspath" value="${jar.name} ." />
+
+	<property name="src.encoding" value="utf8" />
+	<property name="src.version" value="1.6" />
+
+	<target name="main" depends="init, compile, compress">
+		<!-- <echo>BuildNumber:&lt;${build.number}&gt;</echo> -->
+	</target>
+
+	<target name="init">
+		<buildnumber />
+		<tstamp />
+		<mkdir dir="${class.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<delete>
+			<fileset dir="${class.dir}" includes="**/*.class" />
+			<fileset dir="${jar.dir}" includes="**/*.jar" />
+		</delete>
+	</target>
+
+	<target name="compile">
+		<javac fork="true" memoryInitialSize="1g" memoryMaximumSize="1g"
+			srcdir="${src.dir}" destdir="${class.dir}" source="${src.version}"
+			target="${src.version}" encoding="${src.encoding}" debug="on"
+			includeAntRuntime="on">
+		</javac>
+	</target>
+
+	<target name="compress">
+		<jar destfile="${jar.dir}/${jar.name}" basedir="${class.dir}"
+			includes="**/*.*" excludes="**/sample/**/*">
+			<manifest>
+				<attribute name="Main-Class" value="${project.mainclass}" />
+				<attribute name="Class-Path" value="${project.runtimeclasspath}" />
+				<attribute name="Implementation-Title" value="${project.title}" />
+				<attribute name="Implementation-Version" value="${build.number}" />
+				<attribute name="Implementation-Vendor" value="${project.vendor}" />
+				<attribute name="Author" value="${project.author}" />
+				<section name="Copyright">
+					<attribute name="Copy" value="(C) ${project.vendor}" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+</project>
+
+

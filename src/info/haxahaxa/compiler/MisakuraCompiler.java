@@ -8,7 +8,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 /**
- * 　メモ． まだ，デフォルトのsourcepathとclasspathの読み込みがうまくいかない
+ * 内部でjavacを呼び，結果をみさくら語で表示する
  * 
  * @author satanabe1
  * 
@@ -18,15 +18,27 @@ public class MisakuraCompiler {
 
 	/**
 	 * EntryPoint<br>
-	 * 開発用．しばらくデバッグモード．
 	 * 
 	 * @param args
 	 * 
 	 */
 	public static void main(String[] args) {
-		// args = getTestargs();
+		Argument argument = new Argument(args);
+		if (argument.getSources().size() == 0) {
+			help();
+		} else {
+			compile(argument);
+		}
+	}
+
+	/**
+	 * 与えられた引数に基づいてコンパイルを行う
+	 * 
+	 * @param argument
+	 *            コンパイル引数
+	 */
+	private static void compile(Argument argument) {
 		try {
-			Argument argument = new Argument(args);
 			ICompiler compiler = new Compiler(argument);
 			for (String sourceFilePath : argument.getSources()) {
 				ICompileResult result = compiler.compile(new File(
@@ -44,45 +56,25 @@ public class MisakuraCompiler {
 		}
 	}
 
-	public static String[] getTestargs() {
-		String srcFilePath = "hoge" + File.separator + "HogeF.java";
-		String[] testargs = new String[] {
-				"-g:{lines,vars,source}",//
-				"-nowarn",//
-				// "-verbose",//
-				"-deprecation",//
-				// "-cp", "bin",
-				// "-classpath"
-				// "classes" + File.pathSeparator + "hoge",//
-				// "-sourcepath",
-				// ".",//
-				"-bootclasspath",
-				"/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar",//
-				"-extdirs", "ext",//
-				"-endorseddirs", "endor",//
-				// "-proc:{none,only}",//
-				// "-processor", "class2",//
-				"-processorpath", "procpath",//
-				"-d", "tmp",//
-				"-s", "src",//
-				// "-implicit:{none,class}",//
-				"-encoding", "utf-8",//
-				"-source", "1.6",//
-				"-target", "1.6",//
-				// "-version",
-				// "help",
-				// "-Akey[=value]",//
-				// "-X",//
-				// "-JD",//
-				srcFilePath };
-		return testargs;
-	}
-
+	/**
+	 * 成功メッセージを表示する
+	 * 
+	 * @param result
+	 *            コンパイル結果<br>
+	 *            {@link ICompiler#compile(File)}から取得する
+	 */
 	private static void printSuccess(ICompileResult result) {
 		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
 		System.out.println(misakura.getCompleteMessage(result));
 	}
 
+	/**
+	 * コンパイルエラーを表示する
+	 * 
+	 * @param result
+	 *            コンパイル結果<br>
+	 *            {@link ICompiler#compile(File)}から取得する
+	 */
 	private static void printCompileError(ICompileResult result) {
 		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
 		int errorcount = 0;
@@ -90,16 +82,18 @@ public class MisakuraCompiler {
 				.getDiagnostics()) {
 			errorcount++;
 			try {
-				String mword = misakura.getErrorMessage(diagnostic);
-				System.err.println(mword);
+				System.err.println(misakura.getErrorMessage(diagnostic));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println("えらぁあああ あぉは " + errorcount + " これしゅぅぅぅ");
+		System.err.println("えらぁあああ あぉは " + errorcount + " これしゅぅぅぅ");
 	}
 
+	/**
+	 * ヘルプを表示する
+	 */
 	private static void help() {
 		try {
 			Process javacProc = Runtime.getRuntime().exec(
@@ -109,7 +103,7 @@ public class MisakuraCompiler {
 					javacProc.getErrorStream()));
 			String str = null;
 			while ((str = br.readLine()) != null) {
-				System.out.println(str);
+				System.err.println(str.replaceAll("javac", "misakura"));
 			}
 			br.close();
 		} catch (Exception ex) {

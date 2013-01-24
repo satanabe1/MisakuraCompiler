@@ -1,5 +1,6 @@
 MisakuraCompiler
 --
+![Demo](https://github.com/satanabe1/MisakuraCompiler/demo.png)
 コンパイルエラーをみさくら語で出力します．  
 特別な事は何もできません．  
 実行はコマンドラインで　`java info.haxahaxa.compiler.MisakuraCompiler`　です．  

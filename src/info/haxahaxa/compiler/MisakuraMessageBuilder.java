@@ -132,7 +132,7 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 						messageArgs = getArgs((Diagnostic<? extends JavaFileObject>) fobj);
 					}
 				} catch (Exception ex) {
-					logger.log(Level.FINE, "getArgs", ex);
+					logger.log(Level.WARNING, "getArgs", ex);
 				}
 				if (messageArgs != null) {
 					return messageArgs;

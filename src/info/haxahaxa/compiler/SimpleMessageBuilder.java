@@ -23,7 +23,7 @@ public class SimpleMessageBuilder implements IMessageBuilder {
 	public String getErrorMessage(
 			Diagnostic<? extends JavaFileObject> diagnostic) throws Exception {
 		// TODO Auto-generated method stub
-		return diagnostic.getMessage(null);
+		return diagnostic.getMessage(null) + getLine(diagnostic);
 	}
 
 	protected String getLine(Diagnostic<? extends JavaFileObject> diagnostic) {

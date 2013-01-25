@@ -9,7 +9,8 @@ import javax.tools.JavaFileObject;
 
 /**
  * EntoryPoint<br>
- * 内部でjavacを呼び，結果をみさくら語で表示する
+ * 内部でjavacを呼び，結果をみさくら語で表示する<br>
+ * Oracle謹製のjdk1.6とjdk1.7じゃないと動かない。
  * 
  * @author satanabe1
  * 

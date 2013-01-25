@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import java.util.ListResourceBundle;
 import java.util.Properties;
 
-public final class samplecompiler_ja extends ListResourceBundle {
+public final class compiler_ja_16 extends ListResourceBundle {
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
@@ -14,16 +14,13 @@ public final class samplecompiler_ja extends ListResourceBundle {
 	}
 
 	public static void printObj() {
-		samplecompiler_ja c = new samplecompiler_ja();
+		compiler_ja_16 c = new compiler_ja_16();
 		Object[][] obj = c.getContents();
 		for (Object[] o : obj) {
 			String ky = o[0].toString();
 			String val = o[1].toString();
-			val = "\t" + val.replaceAll("\n", "\n\t\t");
-			System.out.println(ky);
-			System.out.println(val);
-			// val = val.replaceAll("\n", "<br>");
-			// System.out.println(ky + "=\"" + val + "\"");
+			val = val.replaceAll("\n", "<br>");
+			System.out.println(ky + "=" + val + "");
 		}
 	}
 

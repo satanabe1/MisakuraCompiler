@@ -36,11 +36,13 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 	private Map<JavaFileObject, List<String>> codes = new HashMap<JavaFileObject, List<String>>();
 
 	private MisakuraMessageBuilder() {
+		String jdkVersion = System.getProperty("" + "java.version").substring(
+				0, 3);
 		try {
 			properties = new Properties();
 			String propFileName = "props" + File.separator
-					+ MisakuraMessageBuilder.class.getSimpleName()
-					+ ".properties";
+					+ MisakuraMessageBuilder.class.getSimpleName() + "_"
+					+ jdkVersion + ".properties";
 			InputStream propStream = null;
 			propStream = MisakuraMessageBuilder.class.getClassLoader()
 					.getResourceAsStream(propFileName);

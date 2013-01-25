@@ -12,7 +12,7 @@
 	<property name="project.title" value="MisakuraCompiler" />
 	<property name="project.vendor" value="haxahaxa.info" />
 	<property name="project.author" value="satanabe1" />
-	<property name="project.mainclass" value="info.haxahaxa.compiler.MisakuraCompiler" />
+	<property name="project.mainclass" value="info.haxahaxa.compiler.misakura.Misakura" />
 	<property name="project.runtimeclasspath" value="${jar.name} ." />
 
 	<property name="src.encoding" value="utf8" />
@@ -40,7 +40,8 @@
 
 	<target name="compress">
 		<mkdir dir="${class.dir}/props" />
-		<copy file="props/MisakuraMessageBuilder.properties" todir="${class.dir}/props" />
+		<copy file="props/MisakuraMessageBuilderV1_1.6.properties" todir="${class.dir}/props" />
+		<copy file="props/MisakuraMessageBuilderV1_1.7.properties" todir="${class.dir}/props" />
 		<jar destfile="${jar.dir}/${jar.name}" basedir="${class.dir}" includes="**/*.*" excludes="**/sample/**/*">
 			<manifest>
 				<attribute name="Main-Class" value="${project.mainclass}" />

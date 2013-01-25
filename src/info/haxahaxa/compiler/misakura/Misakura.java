@@ -1,4 +1,10 @@
-package info.haxahaxa.compiler;
+package info.haxahaxa.compiler.misakura;
+
+import info.haxahaxa.compiler.ArgumentImpl;
+import info.haxahaxa.compiler.CompilerImpl;
+import info.haxahaxa.compiler.ICompileResult;
+import info.haxahaxa.compiler.ICompiler;
+import info.haxahaxa.compiler.IMessageBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,13 +16,12 @@ import javax.tools.JavaFileObject;
 /**
  * EntoryPoint<br>
  * 内部でjavacを呼び，結果をみさくら語で表示する<br>
- * Oracle謹製のjdk1.6とjdk1.7じゃないと動かない。
  * 
  * @author satanabe1
  * 
  */
 
-public class MisakuraCompiler {
+public class Misakura {
 
 	/**
 	 * EntryPoint<br>
@@ -25,7 +30,7 @@ public class MisakuraCompiler {
 	 * 
 	 */
 	public static void main(String[] args) {
-		Argument argument = new Argument(args);
+		ArgumentImpl argument = new ArgumentImpl(args);
 		if (argument.getSources().size() == 0) {
 			help();
 		} else {
@@ -39,9 +44,9 @@ public class MisakuraCompiler {
 	 * @param argument
 	 *            コンパイル引数
 	 */
-	private static void compile(Argument argument) {
+	private static void compile(ArgumentImpl argument) {
 		try {
-			ICompiler compiler = new Compiler(argument);
+			ICompiler compiler = new CompilerImpl(argument);
 			for (String sourceFilePath : argument.getSources()) {
 				ICompileResult result = compiler.compile(new File(
 						sourceFilePath));
@@ -66,7 +71,8 @@ public class MisakuraCompiler {
 	 *            {@link ICompiler#compile(File)}から取得する
 	 */
 	private static void printSuccess(ICompileResult result) {
-		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
+		IMessageBuilder misakura = MisakuraMessageBuilderFactory
+				.getMessageBuilder();
 		System.out.println(misakura.getCompleteMessage(result));
 	}
 
@@ -78,7 +84,8 @@ public class MisakuraCompiler {
 	 *            {@link ICompiler#compile(File)}から取得する
 	 */
 	private static void printCompileError(ICompileResult result) {
-		IMessageBuilder misakura = MisakuraMessageBuilder.getInstance();
+		IMessageBuilder misakura = MisakuraMessageBuilderFactory
+				.getMessageBuilder();
 		int errorcount = 0;
 		for (Diagnostic<? extends JavaFileObject> diagnostic : result
 				.getDiagnostics()) {

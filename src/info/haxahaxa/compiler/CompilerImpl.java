@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -15,13 +16,13 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
-public class Compiler implements ICompiler {
+public class CompilerImpl implements ICompiler {
 
 	private DiagnosticCollector<JavaFileObject> diagnostics;
 
 	private IArgument argument;
 
-	public Compiler(IArgument compileArgument) {
+	public CompilerImpl(IArgument compileArgument) {
 		diagnostics = new DiagnosticCollector<JavaFileObject>();
 		argument = compileArgument;
 	}
@@ -68,7 +69,7 @@ public class Compiler implements ICompiler {
 	private StandardJavaFileManager getStandardJavaFileManager(
 			JavaCompiler javaCompiler) throws IOException {
 		StandardJavaFileManager fileManager = javaCompiler
-				.getStandardFileManager(diagnostics, null, null);
+				.getStandardFileManager(diagnostics, Locale.JAPANESE, null);
 
 		// 注釈プロセッサの検索場所
 		{

@@ -1,18 +1,18 @@
-package info.haxahaxa.compiler;
+package info.haxahaxa.compiler.misakura;
 
-import java.io.BufferedReader;
+import info.haxahaxa.compiler.ICompileResult;
+import info.haxahaxa.compiler.IMessageBuilder;
+import info.haxahaxa.compiler.SimpleMessageBuilder;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,29 +22,30 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 
 /**
- * 何回も500行近いプロパティファイルを読みたくないので，Singletonを採用
+ * 何回も500行近いプロパティファイルを読みたくないので，Singletonを採用<br>
+ * Oracle謹製のjdk1.6とjdk1.7じゃないと動かない。
  * 
  * @author satanabe1
  * 
  */
-public class MisakuraMessageBuilder implements IMessageBuilder {
+public class MisakuraMessageBuilderV1 extends SimpleMessageBuilder implements
+		IMessageBuilder {
 
-	private static final MisakuraMessageBuilder misakura = new MisakuraMessageBuilder();
+	private static final MisakuraMessageBuilderV1 misakura = new MisakuraMessageBuilderV1();
 	private static IOException instanceCreationError = null;
 
 	private Properties properties;
-	private Map<JavaFileObject, List<String>> codes = new HashMap<JavaFileObject, List<String>>();
 
-	private MisakuraMessageBuilder() {
+	private MisakuraMessageBuilderV1() {
 		String jdkVersion = System.getProperty("" + "java.version").substring(
 				0, 3);
 		try {
 			properties = new Properties();
 			String propFileName = "props" + File.separator
-					+ MisakuraMessageBuilder.class.getSimpleName() + "_"
+					+ MisakuraMessageBuilderV1.class.getSimpleName() + "_"
 					+ jdkVersion + ".properties";
 			InputStream propStream = null;
-			propStream = MisakuraMessageBuilder.class.getClassLoader()
+			propStream = MisakuraMessageBuilderV1.class.getClassLoader()
 					.getResourceAsStream(propFileName);
 			if (propStream == null) {
 				propStream = new FileInputStream(propFileName);
@@ -63,6 +64,7 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 		return misakura;
 	}
 
+	@Override
 	public String getCompleteMessage(ICompileResult result) {
 		StringBuilder sb = new StringBuilder();
 		String ret = System.getProperty("line.separator", "\n");
@@ -150,44 +152,5 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 			}
 		}
 		return null;
-	}
-
-	private String getLine(Diagnostic<? extends JavaFileObject> diagnostic) {
-		String ret = System.getProperty("line.separator", "\n");
-		StringBuilder sb = new StringBuilder();
-		List<String> code = getSourceCode(diagnostic.getSource());
-		if (code == null) {
-			return null;
-		}
-		sb.append(ret);
-		sb.append(code.get((int) diagnostic.getLineNumber() - 1));
-		sb.append(ret);
-		sb.append(String.format("%" + diagnostic.getColumnNumber() + "s", "^"));
-
-		return sb.toString();
-	}
-
-	private List<String> getSourceCode(JavaFileObject javaFile) {
-		if (javaFile == null) {
-			return null;
-		}
-		List<String> code = codes.get(javaFile);
-		if (code != null) {
-			return code;
-		}
-		code = new ArrayList<String>();
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					javaFile.openInputStream()));
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				code.add(line);
-			}
-			codes.put(javaFile, code);
-			br.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return code;
 	}
 }

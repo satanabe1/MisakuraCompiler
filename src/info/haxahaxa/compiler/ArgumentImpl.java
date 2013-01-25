@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Argument implements IArgument {
+public class ArgumentImpl implements IArgument {
 
 	/**
 	 * -processorpath path 注釈プロセッサを検索する位置を指定する
@@ -48,7 +48,7 @@ public class Argument implements IArgument {
 	 * 
 	 * @param args
 	 */
-	public Argument(String[] args) {
+	public ArgumentImpl(String[] args) {
 		for (int i = 0; i < args.length; i++) {
 			String e = args[i];
 

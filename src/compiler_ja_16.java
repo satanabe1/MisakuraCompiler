@@ -13,6 +13,25 @@ public final class compiler_ja_16 extends ListResourceBundle {
 		printObj();
 	}
 
+	public static String kata2hira(String str) {
+		StringBuilder sb = new StringBuilder(str);
+		for (int i = 0; i < sb.length(); i++) {
+			char c = sb.charAt(i);
+			if (c >= 'ァ' && c <= 'ン') {
+				sb.setCharAt(i, (char) (c - 'ァ' + 'ぁ'));
+			} else if (c == 'ヵ') {
+				sb.setCharAt(i, 'か');
+			} else if (c == 'ヶ') {
+				sb.setCharAt(i, 'け');
+			} else if (c == 'ヴ') {
+				sb.setCharAt(i, 'う');
+				sb.insert(i + 1, '゛');
+				i++;
+			}
+		}
+		return sb.toString();
+	}
+	
 	public static void printObj() {
 		compiler_ja_16 c = new compiler_ja_16();
 		Object[][] obj = c.getContents();
@@ -20,7 +39,7 @@ public final class compiler_ja_16 extends ListResourceBundle {
 			String ky = o[0].toString();
 			String val = o[1].toString();
 			val = val.replaceAll("\n", "<br>");
-			System.out.println(ky + "=" + val + "");
+			System.out.println(ky + "=" + kata2hira(val) + "");
 		}
 	}
 

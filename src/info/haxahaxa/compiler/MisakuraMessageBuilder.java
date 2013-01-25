@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -95,8 +98,9 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 		message = message.replaceAll("<br>", ret);
 		List<String> rep = new ArrayList<String>();
 		// reflection・・・妥協してしまった．．．
-		Method getArgsMethod = diagnostic.getClass().getMethod("getArgs");
-		Object[] darg = ((Object[]) getArgsMethod.invoke(diagnostic));
+		// Method getArgsMethod = diagnostic.getClass().getMethod("getArgs");
+		// Object[] darg = ((Object[]) getArgsMethod.invoke(diagnostic));
+		Object[] darg = getArgs(diagnostic);
 		for (int i = 0; i < darg.length; i++) {
 			rep.add(darg[i] + "");
 		}
@@ -107,6 +111,43 @@ public class MisakuraMessageBuilder implements IMessageBuilder {
 				+ ": " + message;
 		message = message + getLine(diagnostic);
 		return message;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Object[] getArgs(Diagnostic<? extends JavaFileObject> diagnostic) {
+		Logger logger = Logger.getAnonymousLogger();
+		Method getArgsMethod = null;
+		try {
+			getArgsMethod = diagnostic.getClass().getDeclaredMethod("getArgs");
+		} catch (Exception ex) {
+			logger.log(Level.FINE, "getArgs", ex);
+		}
+		if (getArgsMethod == null) {
+			for (Field field : diagnostic.getClass().getFields()) {
+				field.setAccessible(true);
+				Object[] messageArgs = null;
+				try {
+					Object fobj = field.get(diagnostic);
+					if (fobj instanceof Diagnostic) {
+						messageArgs = getArgs((Diagnostic<? extends JavaFileObject>) fobj);
+					}
+				} catch (Exception ex) {
+					logger.log(Level.FINE, "getArgs", ex);
+				}
+				if (messageArgs != null) {
+					return messageArgs;
+				}
+			}
+		} else {
+			getArgsMethod.setAccessible(true);
+			try {
+				return (Object[]) getArgsMethod.invoke(diagnostic);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	private String getLine(Diagnostic<? extends JavaFileObject> diagnostic) {

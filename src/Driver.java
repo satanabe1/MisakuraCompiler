@@ -12,7 +12,7 @@ public class Driver {
 	public static String[] getTestargs() {
 		String srcFilePath = "hoge" + File.separator + "HogeF.java";
 		String[] testargs = new String[] {
-				"-g:{lines,vars,source}",//
+				// "-g:{lines,vars,source}",//
 				"-nowarn",//
 				// "-verbose",//
 				"-deprecation",//

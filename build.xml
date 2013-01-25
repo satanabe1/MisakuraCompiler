@@ -2,8 +2,10 @@
 <!-- ~/.vim/skels/skel.build.xml -->
 <project name="master" default="main" basedir=".">
 
-	<property name="src.dir" location="src" /><!-- java source -->
-	<property name="class.dir" location="classes" /><!-- class output -->
+	<property name="src.dir" location="src" />
+	<!-- java source -->
+	<property name="class.dir" location="classes" />
+	<!-- class output -->
 	<property name="jar.dir" location="jar" />
 	<property name="jar.name" value="misakura.jar" />
 
@@ -32,16 +34,14 @@
 	</target>
 
 	<target name="compile">
-		<javac fork="true" memoryInitialSize="1g" memoryMaximumSize="1g"
-			srcdir="${src.dir}" destdir="${class.dir}" source="${src.version}"
-			target="${src.version}" encoding="${src.encoding}" debug="on"
-			includeAntRuntime="on">
+		<javac fork="true" memoryInitialSize="1g" memoryMaximumSize="1g" srcdir="${src.dir}" destdir="${class.dir}" source="${src.version}" target="${src.version}" encoding="${src.encoding}" debug="on" includeAntRuntime="on">
 		</javac>
 	</target>
 
 	<target name="compress">
-		<jar destfile="${jar.dir}/${jar.name}" basedir="${class.dir}"
-			includes="**/*.*" excludes="**/sample/**/*">
+		<mkdir dir="${class.dir}/props" />
+		<copy file="props/MisakuraMessageBuilder.properties" todir="${class.dir}/props" />
+		<jar destfile="${jar.dir}/${jar.name}" basedir="${class.dir}" includes="**/*.*" excludes="**/sample/**/*">
 			<manifest>
 				<attribute name="Main-Class" value="${project.mainclass}" />
 				<attribute name="Class-Path" value="${project.runtimeclasspath}" />

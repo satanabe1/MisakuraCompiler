@@ -8,6 +8,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 /**
+ * EntoryPoint<br>
  * 内部でjavacを呼び，結果をみさくら語で表示する
  * 
  * @author satanabe1

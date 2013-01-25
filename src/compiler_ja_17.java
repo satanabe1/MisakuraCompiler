@@ -11,7 +11,6 @@ public final class compiler_ja_17 extends ListResourceBundle {
 			IOException {
 		// printProp("props/MisakuraMessage.properties");
 		printObj();
-		// System.out.println(System.getProperty("java.version"));
 	}
 
 	public static String kata2hira(String str) {
@@ -40,9 +39,7 @@ public final class compiler_ja_17 extends ListResourceBundle {
 			String ky = o[0].toString();
 			String val = o[1].toString();
 			val = val.replaceAll("\n", "<br>");
-			// System.out.println(ky + "=" + kata2hira(val) + "");
-			// System.out.println(kata2hira(val) + "");
-			System.out.println(val + "");
+			System.out.println(ky + "=" + kata2hira(val) + "");
 		}
 	}
 

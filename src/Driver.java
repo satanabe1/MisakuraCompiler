@@ -10,7 +10,7 @@ public class Driver {
 	}
 
 	public static String[] getTestargs() {
-		String srcFilePath = "hoge" + File.separator + "HogeS.java";
+		String srcFilePath = "hoge" + File.separator + "HogeF.java";
 		String[] testargs = new String[] {
 				// "-g:{lines,vars,source}",//
 				"-nowarn",//

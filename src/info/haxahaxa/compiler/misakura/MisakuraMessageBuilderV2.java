@@ -103,7 +103,14 @@ public class MisakuraMessageBuilderV2 extends SimpleMessageBuilder implements
 		return message + getLine(diagnostic);
 	}
 
-	public String jap2misakura(String message) {
+	/**
+	 * 日本語をみさくら語に変換する
+	 * 
+	 * @param message
+	 * @return
+	 */
+	public String jap2misakura(String str) {
+		String message = String.copyValueOf(str.toCharArray());
 		message = kata2hira(message);
 		Collections.shuffle(misakuraWord);
 		for (KeyValue keyValue : misakuraWord) {

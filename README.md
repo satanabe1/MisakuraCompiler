@@ -1,6 +1,6 @@
 MisakuraCompiler
 --
-![Demo](https://raw.github.com/satanabe1/MisakuraCompiler/master/demo.png)
+![Demo](https://raw.github.com/satanabe1/MisakuraCompiler/master/pic/demo1.png)
 コンパイルエラーをみさくら語で出力します．  
 特別な事は何もできません．  
 

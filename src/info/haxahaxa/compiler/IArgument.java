@@ -1,7 +1,11 @@
 package info.haxahaxa.compiler;
 
 import java.util.List;
-
+/**
+ * コンパイル引数を表す
+ * @author satanabe1
+ *
+ */
 public interface IArgument {
 
 	List<String> getANNOTATION_PROCESSOR_PATH();

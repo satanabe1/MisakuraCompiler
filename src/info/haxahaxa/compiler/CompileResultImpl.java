@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,39 +58,47 @@ public class CompileResultImpl implements ICompileResult {
 
 	@Override
 	public void dump(OutputStream out) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("vvvvvvvvvvvvvvvvvvvv");
-		sb.append("\nClassPath\n\t");
-		sb.append(fileManager.getLocation(StandardLocation.CLASS_PATH));
-		sb.append("\nSourcePath\n\t");
-		sb.append(fileManager.getLocation(StandardLocation.SOURCE_PATH));
-		sb.append("\nOptions\n\t");
-		sb.append(options);
-		sb.append("\nDistDir\n\t");
-		sb.append(fileManager.getLocation(StandardLocation.CLASS_OUTPUT));
-		sb.append("\nTarget\n\t");
-		sb.append(sources);
-		sb.append("\nResult\n\t");
-		sb.append(result);
-		sb.append("\n");
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+
+		printWriter.println("vvvvvvvvvvvvvvvvvvvv");
+		printWriter.println("ClassPath");
+		printWriter.print("\t");
+		printWriter.println(fileManager
+				.getLocation(StandardLocation.CLASS_PATH));
+		printWriter.println("SourcePath");
+		printWriter.print("\t");
+		printWriter.println(fileManager
+				.getLocation(StandardLocation.SOURCE_PATH));
+		printWriter.println("Options");
+		printWriter.print("\t");
+		printWriter.println(options);
+		printWriter.println("DistDir");
+		printWriter.print("\t");
+		printWriter.println(fileManager
+				.getLocation(StandardLocation.CLASS_OUTPUT));
+		printWriter.println("Target");
+		printWriter.print("\t");
+		printWriter.println(sources);
+		printWriter.println("Result");
+		printWriter.print("\t");
+		printWriter.println(result);
 		for (Diagnostic<? extends JavaFileObject> diagnostic : diDiagnostics) {
-			sb.append("-- ERROR --\n");
+			printWriter.println("-- ERROR --");
 			List<String> code = getSourceCode(diagnostic.getSource());
-			sb.append(diagnostic.getCode());
-			sb.append("\n");
-			sb.append(diagnostic.getMessage(null));
-			sb.append("\n");
+			printWriter.println(diagnostic.getCode());
+			printWriter.println(diagnostic.getMessage(null));
 			if (code != null) {
-				sb.append(code.get((int) diagnostic.getLineNumber() - 1));
-				sb.append("\n");
-				sb.append(String.format("%" + diagnostic.getColumnNumber()
-						+ "s", "^"));
-				sb.append("\n");
+				printWriter
+						.println(code.get((int) diagnostic.getLineNumber() - 1));
+				printWriter.println(String.format(
+						"%" + diagnostic.getColumnNumber() + "s", "^"));
 			}
 		}
-		sb.append("^^^^^^^^^^^^^^^^^^^^\n");
+		printWriter.println("^^^^^^^^^^^^^^^^^^^^\n");
+		printWriter.close();
 		try {
-			out.write(sb.toString().getBytes());
+			out.write(stringWriter.toString().getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

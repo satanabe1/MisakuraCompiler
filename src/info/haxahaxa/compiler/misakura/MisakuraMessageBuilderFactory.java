@@ -8,17 +8,28 @@ public abstract class MisakuraMessageBuilderFactory {
 		return getMessageBuilder(BuilderVersion.V2);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static IMessageBuilder getMessageBuilder(BuilderVersion version) {
+		if (version == null) {
+
+		}
 		if (version.equals(BuilderVersion.V1)) {
 			return MisakuraMessageBuilderV1.getInstance();
 		} else if (version.equals(BuilderVersion.V2)) {
-			return new MisakuraMessageBuilderV2();
-		} else {
-			return new MisakuraMessageBuilderV3();
+			return new MisakuraMessageBuilderV2(new MisakuraConverterImpl());
 		}
+
+		return null;
 	}
 
 	public enum BuilderVersion {
-		V1, V2, V3,
+		/**
+		 * @deprecated
+		 */
+		V1,
+		/**
+		 * 
+		 */
+		V2,
 	}
 }

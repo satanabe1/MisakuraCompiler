@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,11 +24,12 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 
 /**
+ * 予めみさくら語に変換済みのエラーメッセージが記述されたプロパティファイルを利用して、みさくら語変換を行うクラス<br>
  * 何回も500行近いプロパティファイルを読みたくないので，Singletonを採用<br>
  * Oracle謹製のjdk1.6とjdk1.7じゃないと動かない。
  * 
  * @author satanabe1
- * 
+ * @deprecated
  */
 public class MisakuraMessageBuilderV1 extends SimpleMessageBuilder implements
 		IMessageBuilder {
@@ -66,27 +69,36 @@ public class MisakuraMessageBuilderV1 extends SimpleMessageBuilder implements
 
 	@Override
 	public String getCompleteMessage(ICompileResult result) {
-		StringBuilder sb = new StringBuilder();
-		String ret = System.getProperty("line.separator", "\n");
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+
 		StringBuilder distStr = new StringBuilder();
 		Iterator<? extends File> distIter = result.getFileManager()
 				.getLocation(StandardLocation.CLASS_OUTPUT).iterator();
 		while (distIter.hasNext()) {
 			File file = distIter.next();
 			try {
-				distStr.append("[" + file.getCanonicalPath() + "]");
+				distStr.append("[");
+				distStr.append(file.getCanonicalPath());
+				distStr.append("]");
 			} catch (Exception ex) {
-				distStr.append("[" + file.getAbsolutePath() + "]");
+				distStr.append("[");
+				distStr.append(file.getAbsolutePath());
+				distStr.append("]");
 			}
 			if (distIter.hasNext()) {
-				distStr.append(" , ");
+				distStr.append(" , ");// いや、普通に考えてこんなトコロに入ってこないけどさ
 			}
 		}
 
-		sb.append("こんぱいぃるはせいぃこうしましたのぉおお" + ret);
-		sb.append("しゅちゅりょくしゃきは " + distStr.toString() + " れしゅぅぅぅ" + ret);
-		sb.append("またのぉおおごりようをおﾞぉおォおんまちしてぇぇぇぇ゛おﾞぉおォおんりましゅぅぅぅ");
-		return sb.toString();
+		printWriter.println("こんぱいぃるはせいぃこうしましたのぉおお");
+		printWriter.print("しゅちゅりょくしゃきは ");
+		printWriter.print(distStr.toString());
+		printWriter.println(" れしゅぅぅぅ");
+		printWriter.print("またのぉおおごりようをおﾞぉおォおんまちしてぇぇぇぇ゛おﾞぉおォおんりましゅぅぅぅ");
+		printWriter.close();
+
+		return stringWriter.toString();
 	}
 
 	@Override
@@ -102,8 +114,6 @@ public class MisakuraMessageBuilderV1 extends SimpleMessageBuilder implements
 		message = message.replaceAll("<br>", ret);
 		List<String> rep = new ArrayList<String>();
 		// reflection・・・妥協してしまった．．．
-		// Method getArgsMethod = diagnostic.getClass().getMethod("getArgs");
-		// Object[] darg = ((Object[]) getArgsMethod.invoke(diagnostic));
 		Object[] darg = getArgs(diagnostic);
 		for (int i = 0; i < darg.length; i++) {
 			rep.add(darg[i] + "");

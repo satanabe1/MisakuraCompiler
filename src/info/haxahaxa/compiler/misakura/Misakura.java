@@ -104,15 +104,17 @@ public class Misakura {
 	 * ヘルプを表示する
 	 */
 	private static void help() {
+		MisakuraConverter misakuraConverter = new MisakuraConverterImpl();
 		try {
 			Process javacProc = Runtime.getRuntime().exec(
-					new String[] { "javac", "-J-Duser.language=en", "-help" });
-
+					new String[] { "javac", "-J-Duser.language=ja", "-help" });
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					javacProc.getErrorStream()));
 			String str = null;
 			while ((str = br.readLine()) != null) {
-				System.err.println(str.replaceAll("javac", "misakura"));
+				String message = str.replaceAll("javac", "misakura");
+				System.err.println(misakuraConverter
+						.jap2misakura(message, true));
 			}
 			br.close();
 		} catch (Exception ex) {

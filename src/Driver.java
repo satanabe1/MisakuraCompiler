@@ -2,11 +2,16 @@ import info.haxahaxa.compiler.misakura.Misakura;
 
 import java.io.File;
 
+/**
+ * わざわざテスト駆動型やるほどでもないかなと思ったので・・・
+ * 
+ * @author satanabe1
+ * 
+ */
 public class Driver {
 
 	public static void main(String[] args) {
 		Misakura.main(getTestargs());
-
 	}
 
 	public static String[] getTestargs() {
@@ -19,10 +24,9 @@ public class Driver {
 				// "-cp", "bin",
 				// "-classpath",
 				// "classes" + File.pathSeparator + "hoge",//
-				 "-sourcepath",
-				 ".",//
-				"-bootclasspath",
-				"/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar",//
+				"-sourcepath", ".",//
+				// "-bootclasspath",
+				// "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar",//
 				"-extdirs", "ext",//
 				"-endorseddirs", "endor",//
 				// "-proc:{none,only}",//
